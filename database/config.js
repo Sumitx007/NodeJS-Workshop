@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
     dialect: "mysql"
 })
 
-
+//sequelize
 sequelize.authenticate()
     .then(() => {
         console.log("Database connected successfully")
