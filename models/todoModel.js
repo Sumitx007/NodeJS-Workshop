@@ -21,3 +21,4 @@ const todoTable = (sequelize, DataTypes) => {
 }
 
 module.exports = todoTable
+//haha

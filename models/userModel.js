@@ -14,3 +14,4 @@ const makeUserTable = (sequelize, DataTypes) => {
 }
 
 module.exports = makeUserTable
+// hahah
