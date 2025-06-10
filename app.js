@@ -12,14 +12,6 @@
 // })
 
 
-
-
-
-
-
-
-
-
 const express = require("express")
 const db = require("./database/config")
 
@@ -30,9 +22,16 @@ const bcrypt = require("bcrypt")
 
 app.set("view engine", "ejs")
 
-app.get("/", (req, res)=>{
-    res.render("home", {title: "hahah"})
+// app.get("/", (req, res)=>{
+//     res.render("home", {title: "hahah"})
+// })
+//geting todos data from db
+app.get("/", async (req, res) =>{
+    
+    const datas = await db.todo.findAll()
+    res.render("todo/getTodo", {datas: datas})
 })
+
 
 app.get("/register", (req, res)=>{
     res.render("authentication/register")
@@ -40,7 +39,7 @@ app.get("/register", (req, res)=>{
 app.post("/register", async (req, res) =>{
     console.log(req.body);
 
-     const{ username, email, password, confirm_password } = req.body
+     const{ name, email, password, confirm_password } = req.body
     // const name = req.body.username;
     // const email = req.body.email;
     // const password = req.body.password;
@@ -50,7 +49,7 @@ app.post("/register", async (req, res) =>{
         res.send("Confirm password and Password doesnot match")
     }
     await db.users.create({
-        name : username, 
+        name : name, 
         password : bcrypt.hashSync(password, 10),
         email : email,
     })
@@ -58,7 +57,37 @@ app.post("/register", async (req, res) =>{
     res.send("Registration Sucessfull")
 
 })
-app.get("/createTodo",(req, res) =>{
+
+app.get("/login", (req, res) =>{
+    res.render("authentication/login")
+})
+
+app.post("/login", async (req, res) =>{
+    const {email, password} = req.body
+    
+    // Login logic checking if the email exists or not in the db
+
+    const users = await db.users.findAll({
+        where: {
+            email : email
+        }
+    })
+    if(users.lenth ==0){ //check if the user exists, if not then return
+        res.send("Email not registered")
+    }
+    else{
+        // now verifying if the password match or not
+        const isPasswordMatch = bcrypt.compareSync(password, users[0].password)
+        
+        if(isPasswordMatch){
+            res.send("Logged in Successfully")
+        }
+        else{
+            res.send("Invalid credentials")
+        }
+    }
+})
+app.get("/createTodo",(req, res) =>{ 
     res.render("todo/createTodo")
 })
 
@@ -76,6 +105,15 @@ app.post("/createTodo", async (req, res) =>{
     res.send("todo created sucessfully")
     // res.redirect("/")  //yesley chai aru url ma redirect garxa 
 })
+
+//geting todos data from db
+app.get("/", async (req, res) =>{
+    
+    const datas = await db.todos.findAll()
+    res.render("todo/getTodo", {datas: datas})
+})
+
+
 
 
 app.listen(3000, ()=>{
