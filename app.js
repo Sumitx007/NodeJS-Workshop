@@ -14,13 +14,15 @@
 
 const express = require("express")
 const db = require("./database/config")
-
 const app = express()
+const jwt = require("jsonwebtoken")
+
 app.use(express.urlencoded({ extended: true}))
 const bcrypt = require("bcrypt")
 
 
-app.set("view engine", "ejs")
+app.set("view engine", "ejs")  
+
 
 // app.get("/", (req, res)=>{
 //     res.render("home", {title: "hahah"})
@@ -60,6 +62,7 @@ app.post("/register", async (req, res) =>{
 
 app.get("/login", (req, res) =>{
     res.render("authentication/login")
+    res.redirect("/")  //yesley chai aru url ma redirect garxa 
 })
 
 app.post("/login", async (req, res) =>{
@@ -80,7 +83,14 @@ app.post("/login", async (req, res) =>{
         const isPasswordMatch = bcrypt.compareSync(password, users[0].password)
         
         if(isPasswordMatch){
-            res.send("Logged in Successfully")
+            //jwt token generation
+
+         const token = jwt.sign({name:"sumit"},"haha_secretkey",{
+                expiresIn: "10s" //jwt token expiration time in sec, minutes, hrs and day 
+            })
+            // res.send(token) //showing token in the browser
+            res.cookie("setting_name", token) //storing token as session in the web browser only
+            // res.send("Logged in Successfully")
         }
         else{
             res.send("Invalid credentials")
@@ -103,11 +113,10 @@ app.post("/createTodo", async (req, res) =>{
         status: status
     })
     res.send("todo created sucessfully")
-    // res.redirect("/")  //yesley chai aru url ma redirect garxa 
 })
 
 //geting todos data from db
-app.get("/", async (req, res) =>{
+app.get("/getTodo", async (req, res) =>{
     
     const datas = await db.todos.findAll()
     res.render("todo/getTodo", {datas: datas})
