@@ -2,7 +2,7 @@
 // require("./database/config")
 // const app = express()
 
-// app.set("view engine","ejs")
+// app.set("view engine","ejs")//tells express js to set environment for ejs to run
 
 // app.get("/", (req,res)=>{
 //     res.render("home", { title : "haina Nishant Gay"})
@@ -16,9 +16,12 @@ const express = require("express")
 const db = require("./database/config")
 const app = express()
 const jwt = require("jsonwebtoken")
+const cookieParser = require('cookie-parser')
 
+app.use(cookieParser())
 app.use(express.urlencoded({ extended: true}))
 const bcrypt = require("bcrypt")
+const isLoggedInOrNot = require("./middleware/isLoginOrNot")
 
 
 app.set("view engine", "ejs")  
@@ -62,14 +65,13 @@ app.post("/register", async (req, res) =>{
 
 app.get("/login", (req, res) =>{
     res.render("authentication/login")
-    res.redirect("/")  //yesley chai aru url ma redirect garxa 
 })
 
 app.post("/login", async (req, res) =>{
     const {email, password} = req.body
     
     // Login logic checking if the email exists or not in the db
-
+    
     const users = await db.users.findAll({
         where: {
             email : email
@@ -84,9 +86,9 @@ app.post("/login", async (req, res) =>{
         
         if(isPasswordMatch){
             //jwt token generation
-
-         const token = jwt.sign({name:"sumit"},"haha_secretkey",{
-                expiresIn: "10s" //jwt token expiration time in sec, minutes, hrs and day 
+            
+            const token = jwt.sign({name:"sumit"},"haha_secretkey",{
+                expiresIn: "10d" //jwt token expiration time in sec, minutes, hrs and day 
             })
             // res.send(token) //showing token in the browser
             res.cookie("setting_name", token) //storing token as session in the web browser only
@@ -96,8 +98,9 @@ app.post("/login", async (req, res) =>{
             res.send("Invalid credentials")
         }
     }
+    res.redirect("/")  //yesley chai aru url ma redirect garxa 
 })
-app.get("/createTodo",(req, res) =>{ 
+app.get("/createTodo", isLoggedInOrNot,(req, res) =>{ 
     res.render("todo/createTodo")
 })
 
@@ -116,7 +119,7 @@ app.post("/createTodo", async (req, res) =>{
 })
 
 //geting todos data from db
-app.get("/getTodo", async (req, res) =>{
+app.get("/getTodo", isLoggedInOrNot, async (req, res) =>{
     
     const datas = await db.todos.findAll()
     res.render("todo/getTodo", {datas: datas})
