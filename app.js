@@ -42,7 +42,7 @@ app.get("/register", (req, res)=>{
     res.render("authentication/register")
 })
 app.post("/register", async (req, res) =>{
-    console.log(req.body);
+   
 
      const{ name, email, password, confirm_password } = req.body
     // const name = req.body.username;
@@ -87,7 +87,7 @@ app.post("/login", async (req, res) =>{
         if(isPasswordMatch){
             //jwt token generation
             
-            const token = jwt.sign({name:"sumit"},"haha_secretkey",{
+            const token = jwt.sign({id: users[0].id},"haha_secretkey",{
                 expiresIn: "10d" //jwt token expiration time in sec, minutes, hrs and day 
             })
             // res.send(token) //showing token in the browser
@@ -105,7 +105,7 @@ app.get("/createTodo", isLoggedInOrNot,(req, res) =>{
 })
 
 app.post("/createTodo", async (req, res) =>{
-    console.log(req.body)
+    // console.log(req.body)
 
     const {title, description, date, status } = req.body
 
