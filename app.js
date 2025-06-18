@@ -22,6 +22,7 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true}))
 const bcrypt = require("bcrypt")
 const isLoggedInOrNot = require("./middleware/isLoginOrNot")
+const { where } = require("sequelize")
 
 
 app.set("view engine", "ejs")  
@@ -31,11 +32,11 @@ app.set("view engine", "ejs")
 //     res.render("home", {title: "hahah"})
 // })
 //geting todos data from db
-app.get("/", async (req, res) =>{
+// app.get("/", isLoggedInOrNot, async (req, res) =>{
     
-    const datas = await db.todo.findAll()
-    res.render("todo/getTodo", {datas: datas})
-})
+//     const datas = await db.todo.findAll()
+//     res.render("todo/getTodo", {datas: datas})
+// })
 
 
 app.get("/register", (req, res)=>{
@@ -120,10 +121,37 @@ app.post("/createTodo", isLoggedInOrNot, async (req, res) =>{
 })
 
 //geting todos data from db
-app.get("/getTodo", isLoggedInOrNot, async (req, res) =>{
+// this fetch all the todos list from the db not only the specific user.
+
+// app.get("/getTodo", isLoggedInOrNot, async (req, res) =>{
     
-    const datas = await db.todos.findAll()
+//     const datas = await db.todo.findAll()
+//     res.render("todo/getTodo", {datas: datas})
+// })
+
+
+// for fetching the logged in user only we have....
+app.get("/", isLoggedInOrNot, async(req, res) => {
+    const userId = req.userId
+    const datas = await db.todo.findAll({
+        where: {
+            userId: userId
+        }
+    })
+    // console.log("Logged in user ID:", req.userId) //hahaha debugger
+
     res.render("todo/getTodo", {datas: datas})
+
+})
+app.get("/delete/:id", async (req, res) => {
+    const id = req.params.id
+
+    await db.todo.destroy({
+        where: {
+            id: id
+        }
+    })
+    res.send("Hahahh Deleted Successfully.")
 })
 
 
