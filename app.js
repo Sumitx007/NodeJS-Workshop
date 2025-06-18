@@ -104,16 +104,17 @@ app.get("/createTodo", isLoggedInOrNot,(req, res) =>{
     res.render("todo/createTodo")
 })
 
-app.post("/createTodo", async (req, res) =>{
+app.post("/createTodo", isLoggedInOrNot, async (req, res) =>{
     // console.log(req.body)
-
+    const userId = req.userId
     const {title, description, date, status } = req.body
 
     await db.todo.create({
         title: title,
         description: description,
         date: date,
-        status: status
+        status: status, 
+        userId: userId
     })
     res.send("todo created sucessfully")
 })

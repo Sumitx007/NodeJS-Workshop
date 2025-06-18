@@ -24,6 +24,12 @@ const db = {}
 db.users = require("./../models/userModel")(sequelize,DataTypes)
 db.todo = require("./../models/todoModel")(sequelize,DataTypes)
 
+// yesley foreign key banauxa
+db.users.hasMany(db.todo)
+db.todo.belongsTo(db.users)
+
+
+
 
 sequelize.sync({alter : true})
 .then(() => {

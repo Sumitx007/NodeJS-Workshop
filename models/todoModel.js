@@ -1,8 +1,5 @@
 const todoTable = (sequelize, DataTypes) => {
     const Todo = sequelize.define("todo", {
-        task: {
-            type: DataTypes.STRING
-        },
         title: {
             type: DataTypes.STRING
         },

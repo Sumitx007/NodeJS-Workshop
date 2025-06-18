@@ -19,6 +19,7 @@ const isLoggedInOrNot = (req, res, next) => {
             else{
                 // res.send("Valid token", verified)
                 console.log(result)
+                // req.userId = result.id
                 req.userId = result.id
                 next()
 
