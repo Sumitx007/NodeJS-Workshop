@@ -138,7 +138,7 @@ app.get("/", isLoggedInOrNot, async(req, res) => {
             userId: userId
         }
     })
-    // console.log("Logged in user ID:", req.userId) //hahaha debugger
+    // console.log("Logged in user ID:", req.userId) //hahahaha debugger
 
     res.render("todo/getTodo", {datas: datas})
 
