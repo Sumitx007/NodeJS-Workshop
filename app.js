@@ -153,7 +153,30 @@ app.get("/delete/:id", async (req, res) => {
     })
     res.send("Hahahh Deleted Successfully.")
 })
+app.get("/update/:id", async (req, res) => {
+    const id = req.params.id
+    const todos = await db.todo.findAll({
+        where: {
+            id: id
+        }
+    })
+res.render("todo/updateTodo", {todos: todos})
+})
 
+app.post("/update/:id", async (req, res) => {
+    const id = req.params.id
+    const {title, description, date} = req.body
+    await db.todo.update({
+        title: title,
+        description: description,
+        // date: date
+    }, {
+        where: {
+            id: id
+        }
+    })
+    res.redirect("/")
+})
 
 
 

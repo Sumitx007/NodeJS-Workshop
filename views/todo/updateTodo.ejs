@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>Edit Todo</title>
         <script
             src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
@@ -20,16 +20,16 @@
 
                     <h2
                         class="my-3 text-center text-3xl font-bold tracking-tight text-gray-900">
-                        Add todo
+                        Edit Todo
                     </h2>
 
-                    <form class="space-y-6" method="post" action="/createTodo">
+                    <form class="space-y-6" method="post" action="/update/<%- todos[0].id %>">
 
                         <div>
                             <label for="new-password"
                                 class="block text-sm font-medium text-gray-700">Task</label>
                             <div class="mt-1">
-                                <input name="title" type="username" required
+                                <input name="title" value="<%- todos[0].title %>" type="username" required
                                     class="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
                             </div>
                         </div>
@@ -38,7 +38,7 @@
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700">Description</label>
                             <div class="mt-1">
-                                <input name="description" type="email-address"
+                                <input name="description" value="<%- todos[0].description %>" type="email-address"
                                     autocomplete="email-address" required
                                     class="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
                             </div>
@@ -48,7 +48,7 @@
                             <label for="password"
                                 class="block text-sm font-medium text-gray-700">Date</label>
                             <div class="mt-1">
-                                <input name="date" type="date"
+                                <input name="date" value="<%- todos[0].date %>" type="date"
                                     autocomplete="password" required
                                     class="px-2 py-3 mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-sky-500 focus:outline-none focus:ring-sky-500 sm:text-sm" />
                             </div>
@@ -57,7 +57,7 @@
                         <div>
                             <button type="submit"
                                 class="flex w-full justify-center rounded-md border border-transparent bg-sky-400 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-opacity-75 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-offset-2">
-                                Add todo
+                                Edit todo
                             </button>
                         </div>
                     </form>
