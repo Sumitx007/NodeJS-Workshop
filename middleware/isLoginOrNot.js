@@ -26,10 +26,5 @@ const isLoggedInOrNot = (req, res, next) => {
             }
             
         })
-
-    }
-
-
-
 }
 module.exports = isLoggedInOrNot
