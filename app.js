@@ -11,7 +11,6 @@
 //     console.log("Server is running on http://localhost:3000")
 // })
 
-
 const express = require("express")
 const db = require("./database/config")
 const app = express()
