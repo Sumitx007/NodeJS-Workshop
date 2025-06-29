@@ -23,7 +23,6 @@ const bcrypt = require("bcrypt")
 const isLoggedInOrNot = require("./middleware/isLoginOrNot")
 const { where } = require("sequelize")
 
-
 app.set("view engine", "ejs")  
 
 // app.get("/", (req, res)=>{
